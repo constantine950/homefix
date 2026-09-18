@@ -1,4 +1,3 @@
-// app/(onboarding)/index.tsx
 import { useState } from "react";
 import { View, Text, Pressable, Image, Dimensions } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";

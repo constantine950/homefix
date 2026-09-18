@@ -21,25 +21,28 @@ export default function Button({
 
   const base = "py-4 px-6 rounded-full items-center justify-center";
   const width = fullWidth ? "w-full" : "";
-  const variantStyle =
-    variant === "primary"
-      ? "bg-primary"
-      : "bg-transparent border border-primary";
-  const opacity = isDisabled ? "opacity-50" : "";
 
-  const textStyle =
-    variant === "primary" ? "text-white font-semibold text-base" : "text-primary font-semibold text-base";
+  let bgStyle = "";
+  let textStyle = "";
+
+  if (variant === "primary") {
+    bgStyle = isDisabled ? "bg-primaryLight" : "bg-primary";
+    textStyle = isDisabled ? "text-primary/50" : "text-white";
+  } else {
+    bgStyle = "bg-transparent border border-primary";
+    textStyle = "text-primary";
+  }
 
   return (
     <Pressable
-      className={`${base} ${width} ${variantStyle} ${opacity}`}
+      className={`${base} ${width} ${bgStyle}`}
       disabled={isDisabled}
       {...pressableProps}
     >
       {loading ? (
         <ActivityIndicator color={variant === "primary" ? "#fff" : "#7A1F1F"} />
       ) : (
-        <Text className={textStyle}>{label}</Text>
+        <Text className={`font-semibold text-base ${textStyle}`}>{label}</Text>
       )}
     </Pressable>
   );
