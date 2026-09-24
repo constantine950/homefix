@@ -11,6 +11,7 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import { Link, router } from "expo-router";
 import Input from "../../components/ui/Input";
 import Button from "../../components/ui/Button";
+import { useAuth } from "../../lib/context/AuthContext";
 
 export default function LoginScreen() {
   const [phone, setPhone] = useState("");
@@ -18,18 +19,25 @@ export default function LoginScreen() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
 
+  const { login } = useAuth();
+
   const isValid = phone.trim().length >= 10 && password.length > 0;
 
   async function handleLogin() {
     setError("");
     setLoading(true);
     try {
-      // TODO: replace with real API call, e.g.
-      // const user = await login({ phone, password });
-      // authContext.setUser(user);
+      // TODO: replace with real API call, e.g. const response = await loginApi({ phone, password });
       await new Promise((resolve) => setTimeout(resolve, 800));
 
-      // TODO: branch on real user.role once auth is wired up
+      // TODO: use response.user instead of this fake object once API is wired up
+      await login({
+        id: "temp-id",
+        name: "Test User",
+        phone,
+        role: "customer", // TODO: comes from API response
+      });
+
       router.replace("/(customer)/home");
     } catch (err) {
       setError("Invalid phone number or password");

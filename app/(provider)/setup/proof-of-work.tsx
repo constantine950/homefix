@@ -1,1 +1,9 @@
-// TODO: app/(provider)/setup/proof-of-work.tsx
+import { View, Text } from "react-native";
+
+export default function ProofOfWorkPlaceholder() {
+  return (
+    <View className="flex-1 items-center justify-center bg-white">
+      <Text className="text-gray-400">proof-of-work — coming soon</Text>
+    </View>
+  );
+}
