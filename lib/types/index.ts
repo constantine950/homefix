@@ -20,5 +20,10 @@ export interface Provider {
   profession: string;
   avatarUrl: string;
   isAvailable: boolean;
-  distanceLabel: string; // e.g. "10 min away"
+  distanceLabel: string;
+  coverPhotoUrl?: string;
+  address?: string;
+  phone?: string;
+  whatsapp?: string;
+  proofOfWorkUrls?: string[];
 }
