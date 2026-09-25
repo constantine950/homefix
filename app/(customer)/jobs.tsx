@@ -1,4 +1,3 @@
-// app/(customer)/jobs.tsx
 import { View, Text, TextInput, FlatList } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { router } from "expo-router";
@@ -11,73 +10,62 @@ const ALL_CATEGORIES: Category[] = [
   {
     slug: "cleaners",
     name: "Cleaners",
-    imageUrl:
-      "https://images.unsplash.com/photo-1581578731548-c64695cc6952?w=200",
+    imageUrl: "https://picsum.photos/seed/cleaners/200",
   },
   {
     slug: "painters",
     name: "Painters",
-    imageUrl: "https://images.unsplash.com/photo-1562259949-e8e7689d7828?w=200",
+    imageUrl: "https://picsum.photos/seed/painters/200",
   },
   {
     slug: "electricians",
     name: "Electricians",
-    imageUrl:
-      "https://images.unsplash.com/photo-1621905251189-08b45d6a269e?w=200",
+    imageUrl: "https://picsum.photos/seed/electricians/200",
   },
   {
     slug: "carpenters",
     name: "Carpenters",
-    imageUrl:
-      "https://images.unsplash.com/photo-1621905251189-08b45d6a269e?w=200",
+    imageUrl: "https://picsum.photos/seed/carpenters/200",
   },
   {
     slug: "plumbers",
     name: "Plumbers",
-    imageUrl:
-      "https://images.unsplash.com/photo-1621905251189-08b45d6a269e?w=200",
+    imageUrl: "https://picsum.photos/seed/plumbers/200",
   },
   {
     slug: "pest-control",
     name: "Pest control",
-    imageUrl:
-      "https://images.unsplash.com/photo-1621905251189-08b45d6a269e?w=200",
+    imageUrl: "https://picsum.photos/seed/pestcontrol/200",
   },
   {
     slug: "gardeners",
     name: "Gardeners",
-    imageUrl:
-      "https://images.unsplash.com/photo-1416879595882-3373a0480b5b?w=200",
+    imageUrl: "https://picsum.photos/seed/gardeners/200",
   },
   {
     slug: "interior-decor",
     name: "Interior decor",
-    imageUrl:
-      "https://images.unsplash.com/photo-1524758631624-e2822e304c36?w=200",
+    imageUrl: "https://picsum.photos/seed/interiordecor/200",
   },
   {
     slug: "tillers",
     name: "Tillers",
-    imageUrl:
-      "https://images.unsplash.com/photo-1600607687920-4e2a09cf159d?w=200",
+    imageUrl: "https://picsum.photos/seed/tillers/200",
   },
   {
     slug: "ac-installers",
     name: "Ac installers",
-    imageUrl:
-      "https://images.unsplash.com/photo-1621905251189-08b45d6a269e?w=200",
+    imageUrl: "https://picsum.photos/seed/acinstallers/200",
   },
   {
     slug: "solar-installers",
     name: "Solar installers",
-    imageUrl:
-      "https://images.unsplash.com/photo-1509391366360-2e959784a276?w=200",
+    imageUrl: "https://picsum.photos/seed/solarinstallers/200",
   },
   {
     slug: "welders",
     name: "Welders",
-    imageUrl:
-      "https://images.unsplash.com/photo-1621905251189-08b45d6a269e?w=200",
+    imageUrl: "https://picsum.photos/seed/welders/200",
   },
 ];
 

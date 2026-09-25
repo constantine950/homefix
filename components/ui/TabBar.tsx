@@ -70,7 +70,11 @@ export default function TabBar({ tabs }: Props) {
         return (
           <Pressable
             key={tabKey}
-            onPress={() => router.replace(tab.path as never)}
+            onPress={() => {
+              if (!isFocused) {
+                router.replace(tab.path as never);
+              }
+            }}
             style={{ alignItems: "center" }}
           >
             <Image
