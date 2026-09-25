@@ -27,3 +27,20 @@ export interface Provider {
   whatsapp?: string;
   proofOfWorkUrls?: string[];
 }
+
+export interface ServiceRequest {
+  id: string;
+  category: string;
+  description: string;
+  status: "pending" | "accepted" | "completed";
+  createdAt: string; // ISO date string
+}
+
+export interface HistoryEntry {
+  id: string;
+  providerName: string;
+  providerAvatarUrl: string;
+  profession: string;
+  isAvailable: boolean;
+  contactedLabel: string; // e.g. "32 secs ago", "1 week ago"
+}
