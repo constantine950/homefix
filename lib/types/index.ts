@@ -6,6 +6,12 @@ export interface User {
   phone: string;
   role: UserRole;
   avatarUrl?: string;
+  profession?: string;
+  location?: string;
+  whatsapp?: string;
+  availableDays?: string[];
+  isAvailable?: boolean;
+  proofOfWorkUrls?: string[];
 }
 
 export interface Category {

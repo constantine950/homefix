@@ -13,6 +13,7 @@ interface AuthContextValue {
   isLoading: boolean;
   login: (user: User) => Promise<void>;
   logout: () => Promise<void>;
+  updateUser: (partial: Partial<User>) => Promise<void>;
 }
 
 const AuthContext = createContext<AuthContextValue | undefined>(undefined);
@@ -50,8 +51,19 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     await AsyncStorage.removeItem(STORAGE_KEY);
   }
 
+  async function updateUser(partial: Partial<User>) {
+    setUser((prev) => {
+      if (!prev) return prev;
+      const next = { ...prev, ...partial };
+      AsyncStorage.setItem(STORAGE_KEY, JSON.stringify(next));
+      return next;
+    });
+  }
+
   return (
-    <AuthContext.Provider value={{ user, isLoading, login, logout }}>
+    <AuthContext.Provider
+      value={{ user, isLoading, login, logout, updateUser }}
+    >
       {children}
     </AuthContext.Provider>
   );

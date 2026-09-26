@@ -14,6 +14,7 @@ import { router } from "expo-router";
 import { Feather } from "@expo/vector-icons";
 import Input from "../../../components/ui/Input";
 import Button from "../../../components/ui/Button";
+import { useAuth } from "../../../lib/context/AuthContext";
 
 const SERVICES = [
   "Plumber",
@@ -34,6 +35,8 @@ export default function AvailabilityScreen() {
   const [whatsapp, setWhatsapp] = useState("");
   const [loading, setLoading] = useState(false);
 
+  const { updateUser } = useAuth();
+
   const isValid =
     selectedService !== null &&
     location.trim().length > 0 &&
@@ -49,9 +52,18 @@ export default function AvailabilityScreen() {
   async function handleNext() {
     setLoading(true);
     try {
-      // TODO: replace with real API call, e.g.
-      // await updateProviderProfile({ service: selectedService, location, availableDays: selectedDays, phone, whatsapp: useAsWhatsapp ? phone : whatsapp });
+      // TODO: replace with real API call, e.g. await updateProviderProfile({...})
       await new Promise((resolve) => setTimeout(resolve, 600));
+
+      await updateUser({
+        profession: selectedService ?? undefined,
+        location,
+        availableDays: selectedDays,
+        phone,
+        whatsapp: useAsWhatsapp ? phone : whatsapp,
+        isAvailable: false, // starts unavailable until they explicitly go available
+      });
+
       router.push("/(provider)/setup/proof-of-work");
     } finally {
       setLoading(false);
@@ -89,12 +101,13 @@ export default function AvailabilityScreen() {
             <Text className="text-gray-900 font-semibold mb-3">
               What do you do?
             </Text>
-            <View className="flex-row items-center bg-white rounded-full px-4 h-11 mb-3">
+            <View className="flex-row items-center bg-white rounded-full px-4 h-12 mb-3">
               <Feather name="search" size={16} color="#9CA3AF" />
               <TextInput
                 placeholder="Search"
                 placeholderTextColor="#9CA3AF"
                 className="flex-1 ml-2 text-gray-900"
+                style={{ paddingVertical: 0 }}
               />
             </View>
 
