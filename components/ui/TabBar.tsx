@@ -8,39 +8,38 @@ type TabKey = "home" | "jobs" | "profile" | "history" | "settings";
 interface TabConfig {
   active: ImageSourcePropType;
   inactive: ImageSourcePropType;
-  path: string;
 }
 
 const ICONS: Record<TabKey, TabConfig> = {
   home: {
     active: require("../../assets/icons/home-active.png"),
     inactive: require("../../assets/icons/home-inactive.png"),
-    path: "/home",
   },
   jobs: {
     active: require("../../assets/icons/jobs-active.png"),
     inactive: require("../../assets/icons/jobs-inactive.png"),
-    path: "/jobs",
   },
   profile: {
     active: require("../../assets/icons/jobs-active.png"),
     inactive: require("../../assets/icons/jobs-inactive.png"),
-    path: "/profile",
   },
   history: {
     active: require("../../assets/icons/history-active.png"),
     inactive: require("../../assets/icons/history-inactive.png"),
-    path: "/history",
   },
   settings: {
     active: require("../../assets/icons/settings-active.png"),
     inactive: require("../../assets/icons/settings-inactive.png"),
-    path: "/settings",
   },
 };
 
+interface TabItem {
+  key: TabKey;
+  path: string; // full, group-qualified path, e.g. "/(customer)/home"
+}
+
 interface Props {
-  tabs: TabKey[];
+  tabs: TabItem[];
 }
 
 export default function TabBar({ tabs }: Props) {
@@ -62,14 +61,17 @@ export default function TabBar({ tabs }: Props) {
         justifyContent: "space-around",
       }}
     >
-      {tabs.map((tabKey) => {
-        const tab = ICONS[tabKey];
-        const isFocused = pathname.endsWith(tab.path);
-        const iconSource = isFocused ? tab.active : tab.inactive;
+      {tabs.map((tab) => {
+        const icons = ICONS[tab.key];
+        // pathname from usePathname() never includes the group segment,
+        // so compare against just the last path segment instead.
+        const segment = tab.path.split("/").pop();
+        const isFocused = pathname.endsWith(`/${segment}`);
+        const iconSource = isFocused ? icons.active : icons.inactive;
 
         return (
           <Pressable
-            key={tabKey}
+            key={tab.key}
             onPress={() => {
               if (!isFocused) {
                 router.replace(tab.path as never);

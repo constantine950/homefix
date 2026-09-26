@@ -1,4 +1,4 @@
-// app/(auth)/verify-otp.tsx
+// app/(auth)/verify-otp.tsx — update the imports and handleVerify function
 import { useState, useRef } from "react";
 import {
   View,
@@ -15,11 +15,17 @@ import {
 import { SafeAreaView } from "react-native-safe-area-context";
 import { router, useLocalSearchParams } from "expo-router";
 import Button from "../../components/ui/Button";
+import { useAuth } from "../../lib/context/AuthContext";
+import { UserRole } from "../../lib/types";
 
 const CODE_LENGTH = 4;
 
 export default function VerifyOtpScreen() {
-  const { phone } = useLocalSearchParams<{ phone?: string }>();
+  const { phone, role } = useLocalSearchParams<{
+    phone?: string;
+    role?: UserRole;
+  }>();
+  const { login } = useAuth();
   const [digits, setDigits] = useState<string[]>(Array(CODE_LENGTH).fill(""));
   const [loading, setLoading] = useState(false);
   const inputs = useRef<Array<TextInput | null>>([]);
@@ -53,7 +59,22 @@ export default function VerifyOtpScreen() {
     try {
       // TODO: replace with real API call, e.g. await verifyOtp({ phone, code });
       await new Promise((resolve) => setTimeout(resolve, 800));
-      router.replace("/(auth)/login");
+
+      const userRole: UserRole = role === "provider" ? "provider" : "customer";
+
+      // TODO: use the real user object returned by your signup/verify API
+      await login({
+        id: "temp-id",
+        name: "Test User",
+        phone: phone ?? "",
+        role: userRole,
+      });
+
+      if (userRole === "provider") {
+        router.replace("/(provider)/setup/go-premium");
+      } else {
+        router.replace("/(customer)/home");
+      }
     } finally {
       setLoading(false);
     }

@@ -1,3 +1,4 @@
+// app/(auth)/signup.tsx — add role state + a toggle UI above the form
 import { useState } from "react";
 import {
   View,
@@ -11,8 +12,10 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import { Link, router } from "expo-router";
 import Input from "../../components/ui/Input";
 import Button from "../../components/ui/Button";
+import { UserRole } from "../../lib/types";
 
 export default function SignupScreen() {
+  const [role, setRole] = useState<UserRole>("customer");
   const [name, setName] = useState("");
   const [phone, setPhone] = useState("");
   const [password, setPassword] = useState("");
@@ -40,10 +43,9 @@ export default function SignupScreen() {
 
     setLoading(true);
     try {
-      // TODO: replace with real API call, e.g.
-      // await signup({ name, phone, password });
-      await new Promise((resolve) => setTimeout(resolve, 800)); // fake delay for now
-      router.push({ pathname: "/(auth)/verify-otp", params: { phone } });
+      // TODO: replace with real API call, e.g. await signup({ name, phone, password, role });
+      await new Promise((resolve) => setTimeout(resolve, 800));
+      router.push({ pathname: "/(auth)/verify-otp", params: { phone, role } });
     } catch (err) {
       setError("Something went wrong. Please try again.");
     } finally {
@@ -70,9 +72,44 @@ export default function SignupScreen() {
               <Text className="text-gray-900">Home</Text>
               <Text className="text-primary">Fix</Text>
             </Text>
-            <Text className="text-gray-500 text-base text-center mb-8">
+            <Text className="text-gray-500 text-base text-center mb-6">
               Create an Homefix account
             </Text>
+
+            <View className="flex-row bg-gray-100 rounded-full p-1 mb-6">
+              <Pressable
+                onPress={() => setRole("customer")}
+                className={`flex-1 py-3 rounded-full items-center ${
+                  role === "customer" ? "bg-primary" : ""
+                }`}
+              >
+                <Text
+                  className={
+                    role === "customer"
+                      ? "text-white font-semibold"
+                      : "text-gray-500"
+                  }
+                >
+                  I need a service
+                </Text>
+              </Pressable>
+              <Pressable
+                onPress={() => setRole("provider")}
+                className={`flex-1 py-3 rounded-full items-center ${
+                  role === "provider" ? "bg-primary" : ""
+                }`}
+              >
+                <Text
+                  className={
+                    role === "provider"
+                      ? "text-white font-semibold"
+                      : "text-gray-500"
+                  }
+                >
+                  I provide a service
+                </Text>
+              </Pressable>
+            </View>
 
             <Input
               placeholder="Name"
