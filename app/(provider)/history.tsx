@@ -1,9 +1,101 @@
-import { View, Text } from "react-native";
+// app/(provider)/history.tsx
+import { View, Text, FlatList, Image, Pressable } from "react-native";
+import { SafeAreaView } from "react-native-safe-area-context";
+import { Feather } from "@expo/vector-icons";
 
-export default function HistoryPlaceholder() {
+interface JobHistoryEntry {
+  id: string;
+  customerName: string;
+  customerAvatarUrl: string;
+  service: string;
+  status: "completed" | "cancelled";
+  timeLabel: string;
+}
+
+// TODO: replace with a real API call, e.g. useEffect + fetchJobHistory()
+const MOCK_HISTORY: JobHistoryEntry[] = [
+  {
+    id: "1",
+    customerName: "Emmanuel Okoye",
+    customerAvatarUrl: "https://i.pravatar.cc/150?img=15",
+    service: "Wiring repair",
+    status: "completed",
+    timeLabel: "2 hours ago",
+  },
+  {
+    id: "2",
+    customerName: "Jane Cooper",
+    customerAvatarUrl: "https://i.pravatar.cc/150?img=5",
+    service: "Socket installation",
+    status: "completed",
+    timeLabel: "1 week ago",
+  },
+  {
+    id: "3",
+    customerName: "Devon Lane",
+    customerAvatarUrl: "https://i.pravatar.cc/150?img=8",
+    service: "Circuit breaker fix",
+    status: "cancelled",
+    timeLabel: "2 weeks ago",
+  },
+];
+
+export default function ProviderHistoryScreen() {
   return (
-    <View className="flex-1 items-center justify-center bg-white">
-      <Text className="text-gray-400">history — coming soon</Text>
-    </View>
+    <SafeAreaView className="flex-1 bg-white">
+      <FlatList
+        data={MOCK_HISTORY}
+        keyExtractor={(item) => item.id}
+        contentContainerStyle={{
+          paddingHorizontal: 24,
+          paddingTop: 16,
+          paddingBottom: 140,
+        }}
+        ListHeaderComponent={
+          <View className="mb-4">
+            <View className="flex-row items-center justify-between mb-1">
+              <Text className="text-2xl font-bold text-gray-900">History</Text>
+              <Pressable className="w-10 h-10 rounded-full bg-gray-100 items-center justify-center">
+                <Feather name="sliders" size={18} color="#374151" />
+              </Pressable>
+            </View>
+            <Text className="text-gray-500">
+              A list of jobs you've completed recently
+            </Text>
+          </View>
+        }
+        renderItem={({ item }) => (
+          <View className="flex-row items-center justify-between py-3 border-b border-gray-100">
+            <View className="flex-row items-center flex-1">
+              <Image
+                source={{ uri: item.customerAvatarUrl }}
+                className="w-12 h-12 rounded-full mr-3"
+              />
+              <View className="flex-1">
+                <Text className="text-gray-900 font-semibold text-base">
+                  {item.customerName}
+                </Text>
+                <Text className="text-gray-500 text-sm">
+                  {item.service} · {item.timeLabel}
+                </Text>
+              </View>
+            </View>
+            <View
+              className={`px-3 py-1 rounded-full ${
+                item.status === "completed" ? "bg-primaryLight" : "bg-gray-100"
+              }`}
+            >
+              <Text
+                className={`text-xs font-semibold ${
+                  item.status === "completed" ? "text-primary" : "text-gray-400"
+                }`}
+              >
+                {item.status === "completed" ? "Completed" : "Cancelled"}
+              </Text>
+            </View>
+          </View>
+        )}
+      />
+    </SafeAreaView>
   );
 }

@@ -1,3 +1,4 @@
+// app/(provider)/settings.tsx
 import { View, Text, Pressable, ScrollView, Alert } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { router } from "expo-router";
@@ -19,12 +20,15 @@ export default function ProviderSettingsScreen() {
       label: "Change password",
       onPress: () => router.push("/(auth)/reset-password"),
     },
+    {
+      icon: "star",
+      label: "Go premium",
+      onPress: () => router.push("/(provider)/setup/go-premium"),
+    },
     { icon: "globe", label: "Language", onPress: () => {} },
     { icon: "file-text", label: "Privacy policy", onPress: () => {} },
     { icon: "shield", label: "Terms of services", onPress: () => {} },
     { icon: "info", label: "About HomeFix", onPress: () => {} },
-    { icon: "award", label: "Rate us", onPress: () => {} },
-    { icon: "share-2", label: "Share with friends", onPress: () => {} },
     { icon: "help-circle", label: "Help", onPress: () => {} },
   ];
 
