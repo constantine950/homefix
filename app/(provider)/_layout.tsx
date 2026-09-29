@@ -6,6 +6,7 @@ import TabBar from "../../components/ui/TabBar";
 export default function ProviderLayout() {
   const pathname = usePathname();
   const isSetupFlow = pathname.includes("/setup/");
+  const isGallery = pathname.includes("/gallery");
 
   return (
     <View style={{ flex: 1, backgroundColor: "#ffffff" }}>
@@ -17,8 +18,10 @@ export default function ProviderLayout() {
         <Stack.Screen name="setup/go-premium" />
         <Stack.Screen name="setup/availability" />
         <Stack.Screen name="setup/proof-of-work" />
+        <Stack.Screen name="gallery/index" />
+        <Stack.Screen name="gallery/[index]" />
       </Stack>
-      {!isSetupFlow && (
+      {!isSetupFlow && !isGallery && (
         <TabBar
           tabs={[
             { key: "home", path: "/(provider)/home" },

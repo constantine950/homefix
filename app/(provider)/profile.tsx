@@ -3,6 +3,7 @@ import { View, Text, Pressable, Image, ScrollView, Alert } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { Feather } from "@expo/vector-icons";
 import { useAuth } from "../../lib/context/AuthContext";
+import { router } from "expo-router";
 
 interface InfoRow {
   icon: keyof typeof Feather.glyphMap;
@@ -139,9 +140,9 @@ export default function ProviderProfileScreen() {
           ))}
         </View>
 
-        <Text className="text-lg font-bold text-gray-900 mb-3">
-          Proof of work
-        </Text>
+        <View className="flex-row items-center justify-between mb-3">
+          <Text className="text-lg font-bold text-gray-900">Proof of work</Text>
+        </View>
         {proofOfWorkUrls.length > 0 ? (
           <>
             <ScrollView
@@ -157,11 +158,16 @@ export default function ProviderProfileScreen() {
                 />
               ))}
             </ScrollView>
-            <Pressable className="self-start bg-primaryLight px-4 py-2 rounded-full mt-4">
-              <Text className="text-primary text-sm font-semibold">
-                Add picture
-              </Text>
-            </Pressable>
+            <View className="flex-row gap-3 mt-4">
+              <Pressable
+                onPress={() => router.push("/(provider)/gallery")}
+                className="bg-primaryLight px-4 py-2 rounded-full"
+              >
+                <Text className="text-primary text-sm font-semibold">
+                  See all pictures
+                </Text>
+              </Pressable>
+            </View>
           </>
         ) : (
           <Text className="text-gray-400">No photos uploaded yet</Text>
