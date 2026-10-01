@@ -19,6 +19,8 @@ export default function CustomerLayout() {
         <Stack.Screen name="settings" />
         <Stack.Screen name="category/[slug]" />
         <Stack.Screen name="provider/[id]" />
+        <Stack.Screen name="provider/gallery/index" />
+        <Stack.Screen name="provider/gallery/[index]" />
         <Stack.Screen name="request-service" />
       </Stack>
       {!hideTabBar && (

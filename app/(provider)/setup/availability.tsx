@@ -101,21 +101,40 @@ export default function AvailabilityScreen() {
             <Text className="text-gray-900 font-semibold mb-3">
               What do you do?
             </Text>
-            <View className="flex-row items-center bg-white rounded-full px-4 h-12 mb-3">
+            <View
+              style={{
+                flexDirection: "row",
+                alignItems: "center",
+                backgroundColor: "#ffffff",
+                borderRadius: 999,
+                paddingHorizontal: 16,
+                height: 48,
+                marginBottom: 12,
+              }}
+            >
               <Feather name="search" size={16} color="#9CA3AF" />
               <TextInput
                 placeholder="Search"
                 placeholderTextColor="#9CA3AF"
-                className="flex-1 ml-2 text-gray-900"
-                style={{ paddingVertical: 0 }}
+                style={{
+                  flex: 1,
+                  marginLeft: 8,
+                  fontSize: 16,
+                  color: "#111827",
+                  paddingVertical: 0,
+                  includeFontPadding: false,
+                }}
               />
             </View>
 
             <View className="flex-row items-center justify-between mb-3">
-              <Text className="text-gray-500 text-sm">Select 1 max</Text>
-              <Text className="text-primary underline text-sm font-semibold">
-                Upgrade
-              </Text>
+              <Pressable
+                onPress={() => router.push("/(provider)/setup/go-premium")}
+              >
+                <Text className="text-primary underline text-sm font-semibold">
+                  Upgrade
+                </Text>
+              </Pressable>
             </View>
 
             <View className="flex-row flex-wrap gap-2">

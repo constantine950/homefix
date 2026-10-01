@@ -2,8 +2,9 @@ import { useState } from "react";
 import { View, Text, Pressable, Image, ScrollView, Alert } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { Feather } from "@expo/vector-icons";
-import { useAuth } from "../../lib/context/AuthContext";
 import { router } from "expo-router";
+import * as ImagePicker from "expo-image-picker";
+import { useAuth } from "../../lib/context/AuthContext";
 
 interface InfoRow {
   icon: keyof typeof Feather.glyphMap;
@@ -12,8 +13,9 @@ interface InfoRow {
 }
 
 export default function ProviderProfileScreen() {
-  const { user } = useAuth();
-  const [isAvailable, setIsAvailable] = useState(user?.isAvailable ?? false);
+  const { user, updateUser } = useAuth();
+  const [uploading, setUploading] = useState(false);
+  const isAvailable = user?.isAvailable ?? false;
 
   function handleToggleAvailability(next: boolean) {
     Alert.alert(
@@ -25,13 +27,43 @@ export default function ProviderProfileScreen() {
         { text: "Cancel", style: "cancel" },
         {
           text: "Continue",
-          onPress: () => {
-            setIsAvailable(next);
+          onPress: async () => {
+            await updateUser({ isAvailable: next });
             // TODO: replace with real API call, e.g. await updateAvailability(next);
           },
         },
       ],
     );
+  }
+
+  async function handleAddPicture() {
+    const permission = await ImagePicker.requestMediaLibraryPermissionsAsync();
+    if (!permission.granted) {
+      Alert.alert(
+        "Permission needed",
+        "We need access to your photos to upload proof of work.",
+      );
+      return;
+    }
+
+    const result = await ImagePicker.launchImageLibraryAsync({
+      mediaTypes: ["images"],
+      allowsMultipleSelection: true,
+      quality: 0.7,
+      selectionLimit: 8,
+    });
+
+    if (!result.canceled) {
+      setUploading(true);
+      try {
+        const newUris = result.assets.map((asset) => asset.uri);
+        const existing = user?.proofOfWorkUrls ?? [];
+        // TODO: replace with real API call, e.g. await uploadProofOfWork(newUris);
+        await updateUser({ proofOfWorkUrls: [...existing, ...newUris] });
+      } finally {
+        setUploading(false);
+      }
+    }
   }
 
   const rows: InfoRow[] = [
@@ -143,35 +175,48 @@ export default function ProviderProfileScreen() {
         <View className="flex-row items-center justify-between mb-3">
           <Text className="text-lg font-bold text-gray-900">Proof of work</Text>
         </View>
-        {proofOfWorkUrls.length > 0 ? (
-          <>
-            <ScrollView
-              horizontal
-              showsHorizontalScrollIndicator={false}
-              contentContainerStyle={{ gap: 8 }}
-            >
-              {proofOfWorkUrls.map((url, i) => (
-                <Image
-                  key={i}
-                  source={{ uri: url }}
-                  style={{ width: 100, height: 100, borderRadius: 16 }}
-                />
-              ))}
-            </ScrollView>
-            <View className="flex-row gap-3 mt-4">
-              <Pressable
-                onPress={() => router.push("/(provider)/gallery")}
-                className="bg-primaryLight px-4 py-2 rounded-full"
-              >
-                <Text className="text-primary text-sm font-semibold">
-                  See all pictures
-                </Text>
-              </Pressable>
-            </View>
-          </>
-        ) : (
-          <Text className="text-gray-400">No photos uploaded yet</Text>
+
+        {proofOfWorkUrls.length > 0 && (
+          <ScrollView
+            horizontal
+            showsHorizontalScrollIndicator={false}
+            contentContainerStyle={{ gap: 8 }}
+          >
+            {proofOfWorkUrls.map((url, i) => (
+              <Image
+                key={i}
+                source={{ uri: url }}
+                style={{ width: 100, height: 100, borderRadius: 16 }}
+              />
+            ))}
+          </ScrollView>
         )}
+
+        {proofOfWorkUrls.length === 0 && (
+          <Text className="text-gray-400 mb-4">No photos uploaded yet</Text>
+        )}
+
+        <View className="flex-row gap-3 mt-4">
+          {proofOfWorkUrls.length > 0 && (
+            <Pressable
+              onPress={() => router.push("/(provider)/gallery")}
+              className="bg-primaryLight px-4 py-2 rounded-full"
+            >
+              <Text className="text-primary text-sm font-semibold">
+                See all pictures
+              </Text>
+            </Pressable>
+          )}
+          <Pressable
+            onPress={handleAddPicture}
+            disabled={uploading}
+            className="bg-primaryLight px-4 py-2 rounded-full"
+          >
+            <Text className="text-primary text-sm font-semibold">
+              {uploading ? "Uploading..." : "Add picture"}
+            </Text>
+          </Pressable>
+        </View>
       </ScrollView>
     </SafeAreaView>
   );

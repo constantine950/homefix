@@ -112,20 +112,27 @@ export default function ProviderDetailScreen() {
             contentContainerStyle={{ gap: 8, paddingLeft: 24, paddingRight: 0 }}
           >
             {provider.proofOfWorkUrls?.map((url, i) => (
-              <Image
+              <Pressable
                 key={i}
-                source={{ uri: url }}
-                style={{
-                  width: PHOTO_SIZE,
-                  height: PHOTO_SIZE,
-                  borderRadius: 16,
-                }}
-              />
+                onPress={() => router.push(`/(customer)/provider/gallery/${i}`)}
+              >
+                <Image
+                  source={{ uri: url }}
+                  style={{
+                    width: PHOTO_SIZE,
+                    height: PHOTO_SIZE,
+                    borderRadius: 16,
+                  }}
+                />
+              </Pressable>
             ))}
           </ScrollView>
 
           <View className="items-center px-6">
-            <Pressable className="bg-primaryLight px-4 py-2 rounded-full mb-6">
+            <Pressable
+              onPress={() => router.push("/(customer)/provider/gallery")}
+              className="bg-primaryLight px-4 py-2 rounded-full mb-6"
+            >
               <Text className="text-primary text-sm font-semibold">
                 See all pictures
               </Text>

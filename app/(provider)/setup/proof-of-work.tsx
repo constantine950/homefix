@@ -1,3 +1,4 @@
+// app/(provider)/setup/proof-of-work.tsx
 import { useState } from "react";
 import { View, Text, Pressable, Image, ScrollView, Alert } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
@@ -5,8 +6,10 @@ import { router } from "expo-router";
 import { Feather } from "@expo/vector-icons";
 import * as ImagePicker from "expo-image-picker";
 import Button from "../../../components/ui/Button";
+import { useAuth } from "../../../lib/context/AuthContext";
 
 export default function ProofOfWorkScreen() {
+  const { updateUser } = useAuth();
   const [photos, setPhotos] = useState<string[]>([]);
   const [loading, setLoading] = useState(false);
 
@@ -38,6 +41,7 @@ export default function ProofOfWorkScreen() {
     try {
       // TODO: replace with real API call, e.g. await uploadProofOfWork(photos);
       await new Promise((resolve) => setTimeout(resolve, 800));
+      await updateUser({ proofOfWorkUrls: photos });
       router.replace("/(provider)/home");
     } finally {
       setLoading(false);
@@ -63,25 +67,26 @@ export default function ProofOfWorkScreen() {
       <Text className="text-gray-500 mb-6">
         Upload photos of completed jobs
       </Text>
-
       {hasPhotos ? (
         <ScrollView className="flex-1">
-          <View className="flex-row flex-wrap gap-3 mb-4">
+          <View
+            style={{
+              flexDirection: "row",
+              flexWrap: "wrap",
+              gap: 12,
+              marginBottom: 16,
+            }}
+          >
             {photos.map((uri, i) => (
               <Image
                 key={i}
                 source={{ uri }}
-                className="w-[30%] aspect-square rounded-2xl"
+                style={{ width: 100, height: 100, borderRadius: 16 }}
               />
             ))}
           </View>
 
           <View className="flex-row gap-3 mb-6">
-            <Pressable className="bg-primaryLight px-4 py-2 rounded-full">
-              <Text className="text-primary text-sm font-semibold">
-                See all pictures
-              </Text>
-            </Pressable>
             <Pressable
               onPress={handlePickImages}
               className="bg-primaryLight px-4 py-2 rounded-full"
